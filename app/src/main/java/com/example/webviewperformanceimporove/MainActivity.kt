@@ -1,19 +1,20 @@
 package com.example.webviewperformanceimporove
 
 import android.annotation.SuppressLint
-import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
+import android.webkit.ConsoleMessage
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.nativelib.NativeLib
 
 
 class MainActivity : AppCompatActivity() {
 
-    var WEBVIEW_BASE_URL : String =  "https://main--meek-cuchufli-1de25d.netlify.app/src/html/home.html"
+    private var WEBVIEW_BASE_URL : String =  "https://main--meek-cuchufli-1de25d.netlify.app/src/html/home.html"
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +27,12 @@ class MainActivity : AppCompatActivity() {
         webView.getSettings().javaScriptEnabled = true
         webView.getSettings().setSupportZoom(true);
         webView.setWebViewClient(WebViewClient())
+        webView.setWebViewClient(object : WebViewClient() {
+            fun onConsoleMessage(consoleMessage: ConsoleMessage): Boolean {
+                Log.d("WebViewConsole", consoleMessage.message()) // Print message to Android Logcat
+                return true
+            }
+        })
 
         webView.addJavascriptInterface(this, "AndroidInterface");
 
@@ -34,13 +41,24 @@ class MainActivity : AppCompatActivity() {
 
 
     @JavascriptInterface
-    fun showVideoWithJdkMethod(fileUrl : String) {
-        Toast.makeText(this, fileUrl, Toast.LENGTH_SHORT).show()
+    fun showVideoWithJdkMethod(fileUrl: String) {
+        val iterations = 10000000 // Adjust the number of iterations as needed
+        var totalDuration = 0L
+        repeat(iterations) {
+            val startTime = System.currentTimeMillis()
+            // Perform the operation here
+            val endTime = System.currentTimeMillis()
+            val duration = endTime - startTime
+            totalDuration += duration
+        }
+        val averageDuration = totalDuration.toDouble() / iterations
+        Log.d("NativeLib", "log message: $fileUrl average duration: $averageDuration ms")
     }
+
 
 
     @JavascriptInterface
     fun showVideoWithNdkMethod(fileUrl : String) {
-        Toast.makeText(this, fileUrl, Toast.LENGTH_SHORT).show()
+        NativeLib.showLog(this,fileUrl)
     }
 }

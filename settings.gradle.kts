@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "WebViewPerformanceImporove"
 include(":app")
+include(":nativelib")
