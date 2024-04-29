@@ -6,9 +6,9 @@ object NativeLib {
     /**
      * A method to show a toast message using native code.
      */
-    fun showLog(context: Context?, message: String) {
+    fun showLog(context: Context?, message: String) : Double {
         // Call the native method through JNI to show the toast
-        nativeShowLog(message)
+       return nativeShowLog(message)
     }
 
     /**
@@ -21,5 +21,5 @@ object NativeLib {
     /**
      * Native method declaration.
      */
-    private external fun nativeShowLog(message: String)
+    private external fun nativeShowLog(message: String) : Double
 }

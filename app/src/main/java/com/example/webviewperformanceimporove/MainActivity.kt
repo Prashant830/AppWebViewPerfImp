@@ -51,14 +51,19 @@ class MainActivity : AppCompatActivity() {
             val duration = endTime - startTime
             totalDuration += duration
         }
-        val averageDuration = totalDuration.toDouble() / iterations
-        Log.d("NativeLib", "log message: $fileUrl average duration: $averageDuration ms")
+        val averageDuration = totalDuration / iterations.toDouble()
+        val formattedDuration = String.format("%.10f", averageDuration) // Adjust precision as needed
+        Log.d("NativeLib", "log message: average duration: $formattedDuration ms")
+        Toast.makeText(this, "log message: average duration in normal JDk or JAVA code in same method: $formattedDuration ms", Toast.LENGTH_SHORT).show()
+
     }
 
 
 
     @JavascriptInterface
     fun showVideoWithNdkMethod(fileUrl : String) {
-        NativeLib.showLog(this,fileUrl)
+        val averageDuration =  NativeLib.showLog(this,fileUrl)
+        val formattedDuration = String.format("%.10f", averageDuration)
+        Toast.makeText(this, "log message: average duration in JNI or NDK or CPP code in same method: $formattedDuration ms", Toast.LENGTH_SHORT).show()
     }
 }

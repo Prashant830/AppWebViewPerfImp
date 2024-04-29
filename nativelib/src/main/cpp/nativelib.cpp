@@ -3,11 +3,11 @@
 #include <android/log.h>
 #include <chrono>
 
-extern "C" JNIEXPORT void JNICALL
+extern "C" JNIEXPORT double JNICALL
 Java_com_example_nativelib_NativeLib_nativeShowLog(JNIEnv* env, jobject thiz, jstring message) {
     if (message == nullptr ) {
         __android_log_print(ANDROID_LOG_ERROR, "NativeLib", "Invalid parameters");
-        return;
+        double O;
     }
 
     // Perform multiple iterations
@@ -32,11 +32,14 @@ Java_com_example_nativelib_NativeLib_nativeShowLog(JNIEnv* env, jobject thiz, js
     const char* messageStr = env->GetStringUTFChars(message, nullptr);
 
     // Log the message instead of showing the toast
-    __android_log_print(ANDROID_LOG_DEBUG, "NativeLib", "Log message: %s", messageStr);
+//    __android_log_print(ANDROID_LOG_DEBUG, "NativeLib", "Log message: %s", messageStr);
 
     // Release the JNI string
     env->ReleaseStringUTFChars(message, messageStr);
 
     // Log the average duration
     __android_log_print(ANDROID_LOG_DEBUG, "NativeLib", "Average execution duration: %f ms", averageDuration);
+
+    return averageDuration;
+
 }
