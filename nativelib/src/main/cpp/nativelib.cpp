@@ -3,6 +3,8 @@
 #include <android/log.h>
 #include <chrono>
 
+
+// show log for average after 10000000 iteration
 extern "C" JNIEXPORT double JNICALL
 Java_com_example_nativelib_NativeLib_nativeShowLog(JNIEnv* env, jobject thiz, jstring message) {
     if (message == nullptr ) {
@@ -41,5 +43,28 @@ Java_com_example_nativelib_NativeLib_nativeShowLog(JNIEnv* env, jobject thiz, js
     __android_log_print(ANDROID_LOG_DEBUG, "NativeLib", "Average execution duration: %f ms", averageDuration);
 
     return averageDuration;
-
 }
+
+
+
+
+// simple toast method in cpp
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_nativelib_NativeLib_nativeShowToast(JNIEnv* env, jobject thiz, jobject obj , jstring message) {
+    const char *msg = env->GetStringUTFChars(message, nullptr);
+
+    // Convert char* to jstring
+    jclass toastClass = env->FindClass("android/widget/Toast");
+    jmethodID makeText = env->GetStaticMethodID(toastClass, "makeText", "(Landroid/content/Context;Ljava/lang/CharSequence;I)Landroid/widget/Toast;");
+    jmethodID show = env->GetMethodID(toastClass, "show", "()V");
+
+    // Call Toast.makeText() to create a Toast object
+    jobject toast = env->CallStaticObjectMethod(toastClass, makeText, obj, env->NewStringUTF(msg), 1);
+
+    // Call Toast.show() to display the Toast
+    env->CallVoidMethod(toast, show);
+
+    // Release the memory allocated for jstring
+    env->ReleaseStringUTFChars(message, msg);
+}
+
