@@ -62,8 +62,18 @@ class MainActivity : AppCompatActivity() {
 
     @JavascriptInterface
     fun showVideoWithNdkMethod(fileUrl : String) {
-        val averageDuration =  NativeLib.showLog(this,fileUrl)
+
+        // show log
+        val averageDuration =  NativeLib.showLog(fileUrl)
+
+
         val formattedDuration = String.format("%.10f", averageDuration)
+
+        // show Toast
         NativeLib.showToast(this,"log message: average duration in JNI or NDK or CPP code in same method: $formattedDuration ms")
+
+        // move goalClass (intent)
+//        NativeLib.callIntentMethod(this,"com/example/webviewperformanceimporove/GoalClass")
+
     }
 }

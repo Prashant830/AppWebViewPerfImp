@@ -68,3 +68,27 @@ Java_com_example_nativelib_NativeLib_nativeShowToast(JNIEnv* env, jobject thiz, 
     env->ReleaseStringUTFChars(message, msg);
 }
 
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_nativelib_NativeLib_nativeStartActivity(JNIEnv* env, jobject thiz, jobject obj , jstring goalClass) {
+    jclass contextClass = env->GetObjectClass(obj);
+    jmethodID getApplicationContext = env->GetMethodID(contextClass, "getApplicationContext", "()Landroid/content/Context;");
+    jobject context = env->CallObjectMethod(obj, getApplicationContext);
+
+    // Get the Intent class
+    jclass intentClass = env->FindClass("android/content/Intent");
+    jmethodID constructor = env->GetMethodID(intentClass, "<init>", "(Landroid/content/Context;Ljava/lang/Class;)V");
+
+    // goalClass in charString
+    const char* goalClassStr = env->GetStringUTFChars(goalClass, nullptr);
+
+    // Specify the activity class to start
+    jclass targetActivityClass = env->FindClass(goalClassStr);
+
+    // Create the intent
+    jobject intent = env->NewObject(intentClass, constructor, context, targetActivityClass);
+
+    // Start the activity
+    jmethodID startActivityMethod = env->GetMethodID(contextClass, "startActivity", "(Landroid/content/Intent;)V");
+    env->CallVoidMethod(obj, startActivityMethod, intent);
+}
+

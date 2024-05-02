@@ -8,7 +8,7 @@ object NativeLib {
      */
 
     // log method
-    fun showLog(context: Context?, message: String) : Double {
+    fun showLog(message: String) : Double {
         // Call the native method through JNI to show the toast
        return nativeShowLog(message)
     }
@@ -19,6 +19,11 @@ object NativeLib {
         return nativeShowToast(context,message)
     }
 
+    // intent method for startActivity
+    fun callIntentMethod(context: Context?, goalClass: String) {
+        // Call the native method through JNI to show the toast
+        return nativeStartActivity(context,goalClass)
+    }
     /**
      * Load the native library.
      */
@@ -38,5 +43,9 @@ object NativeLib {
 
     // Toast method declaration in cpp
     private external fun nativeShowToast( context: Context?, message: String)
+
+    // intent method declaration in cpp
+    private external fun nativeStartActivity( context: Context?, message: String)
+
 
 }
