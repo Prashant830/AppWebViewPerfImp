@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
         NativeLib.showToast(this,"log message: average duration in JNI or NDK or CPP code in same method: $formattedDuration ms")
 
         // move goalClass (intent)
-//        NativeLib.callIntentMethod(this,"com/example/webviewperformanceimporove/GoalClass")
+        NativeLib.callIntentMethod(this,"com/example/webviewperformanceimporove/GoalClass")
 
     }
 }
